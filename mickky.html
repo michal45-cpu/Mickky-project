@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do You Love Me?</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#f3f3f3;
+  font-family:Arial, sans-serif;
+}
+
+.box{
+  width:330px;
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+#char{
+  width:140px;
+  margin:10px auto;
+  display:block;
+}
+
+.msg{
+  margin:10px 0 20px;
+  font-size:15px;
+}
+
+.buttons{
+  display:flex;
+  justify-content:space-around;
+}
+
+button{
+  padding:12px 22px;
+  font-size:16px;
+  border:none;
+  border-radius:12px;
+  color:white;
+}
+
+#yes{ background:#4caf50; }
+#no{
+  background:#f44336;
+  position:relative;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>Do You Love Me? 🤔</h2>
+
+  <img id="char" alt="character">
+
+  <div id="msg" class="msg">Be honest 😊</div>
+
+  <div class="buttons">
+    <button id="yes" type="button">Yes</button>
+    <button id="no" type="button">No</button>
+  </div>
+</div>
+
+<audio id="happyMusic" preload="auto">
+  <source src="https://assets.mixkit.co/music/preview/mixkit-happy-feeling-250.mp3">
+</audio>
+
+<audio id="sadMusic" preload="auto">
+  <source src="https://assets.mixkit.co/music/preview/mixkit-sad-piano-loop-494.mp3">
+</audio>
+
+<script>
+const normalImg = "https://www.citypng.com/public/uploads/preview/hd-mickey-mouse-sitting-down-png-704081694682993jipxbznarf.png";
+const happyImg  = "https://p7.hiclipart.com/preview/76/790/404/mickey-mouse-minnie-mouse-birthday-the-walt-disney-company-mickey-mouse.jpg";
+const sadImg    = "https://www.pngall.com/wp-content/uploads/18/Depressed-Mickey-Mouse-Illustration-PNG-thumb.png";
+
+const charImg = document.getElementById("char");
+const msg     = document.getElementById("msg");
+const yesBtn  = document.getElementById("yes");
+const noBtn   = document.getElementById("no");
+
+const happyMusic = document.getElementById("happyMusic");
+const sadMusic   = document.getElementById("sadMusic");
+
+let noCount = 0;
+
+/* initial image */
+charImg.src = normalImg;
+
+/* YES */
+function yesAction(e){
+  e.preventDefault();
+
+  sadMusic.pause(); sadMusic.currentTime = 0;
+
+  charImg.src = happyImg;
+  msg.textContent = "I know you love me 💖🥰";
+
+  happyMusic.currentTime = 0;
+  happyMusic.play();
+}
+
+/* NO */
+function noAction(e){
+  e.preventDefault();
+  noCount++;
+
+  happyMusic.pause(); happyMusic.currentTime = 0;
+
+  charImg.src = sadImg;
+  msg.textContent = "Think about it please… 😢";
+
+  sadMusic.currentTime = 0;
+  sadMusic.play();
+
+  if(noCount >= 2){
+    moveNoButtonFar();
+  }
+}
+
+/* FUN FAR MOVEMENT */
+function moveNoButtonFar(){
+  const box = document.querySelector(".box");
+  const boxRect = box.getBoundingClientRect();
+
+  const maxX = boxRect.width - noBtn.offsetWidth;
+  const maxY = boxRect.height - noBtn.offsetHeight;
+
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top  = y + "px";
+  noBtn.style.transition = "0.15s ease";
+}
+
+/* EVENTS */
+yesBtn.addEventListener("click", yesAction);
+yesBtn.addEventListener("touchstart", yesAction);
+
+noBtn.addEventListener("click", noAction);
+noBtn.addEventListener("touchstart", noAction);
+</script>
+
+</body>
+</html>
